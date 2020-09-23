@@ -18,10 +18,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@WithMockUser("user")
-public class GreetingControllerTest {
-
+public class SecurityConfigurationTest {
     private MockMvc mockMvc;
+    //private MockMvc adminmockMvc;
+
 
     @Autowired
     private WebApplicationContext context;
@@ -35,63 +35,27 @@ public class GreetingControllerTest {
     }
 
     @Test
-    public void getGreeting() throws Exception {
-        MvcResult result = mockMvc.perform(
-                post("/greeting")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Henning\",\"age\":\"18\",\"vegan\":false}"))
-                .andExpect(status().isCreated())
-                .andExpect(content().json("{\n" +
-                        "    \"name\": \"Henning\",\n" +
-                        "    \"age\": 18,\n" +
-                        "    \"vegan\": false\n" +
-                        "}")).andReturn();
-
-        String id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
-
-        mockMvc.perform(
-                get("/greeting/{id}", id))
-                .andExpect(content().json("{\n" +
-                        "    \"name\": \"Henning\",\n" +
-                        "    \"age\": 18,\n" +
-                        "    \"vegan\": false\n" +
-                        "}"));
-
-
-    }
-
-    @Test
-    public void getGreetingInvalid() throws Exception {
-        mockMvc.perform(
-                get("/greeting/{id}", "0f81d478-6ece-4b59-8075-bd6a627d76fd"))
-                .andExpect(status().isNotFound());
-    }
-
-
-    @Test
+    @WithMockUser(roles = {"VIEWER"})
     public void create() throws Exception {
         mockMvc.perform(
                 post("/greeting")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Henning\",\"age\":\"18\",\"vegan\":false}"))
-                .andExpect(status().isCreated())
-                .andExpect(content().json("{\n" +
-                        "    \"name\": \"Henning\",\n" +
-                        "    \"age\": 18,\n" +
-                        "    \"vegan\": false\n" +
-                        "}"));
+                .andExpect(status().isForbidden());
     }
 
     @Test
+    @WithMockUser(roles = {"VIEWER"})
     public void createInvalid() throws Exception {
         mockMvc.perform(
                 post("/greeting")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"firstname\":\"Henning\",\"age\":\"18\",\"vegan\":false}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isForbidden());
     }
 
     @Test
+    @WithMockUser(roles = {"VIEWER"})
     public void testdelete() throws Exception {
         MvcResult result = mockMvc.perform(
                 post("/greeting")
@@ -102,20 +66,23 @@ public class GreetingControllerTest {
                         "    \"name\": \"Henning\",\n" +
                         "    \"age\": 18,\n" +
                         "    \"vegan\": false\n" +
-                        "}")).andReturn();
+                        "}"))
+                .andReturn();
 
         String id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
 
         mockMvc.perform(
                 delete("/greeting/{id}", id))
-                .andExpect(status().isOk());
+                .andExpect(status().isForbidden());
     }
 
+
     @Test
+    @WithMockUser(roles = {"VIEWER"})
     public void deleteInvalid() throws Exception {
         mockMvc.perform(
                 delete("/greeting/{id}", "0f81d478-6ece-4b59-8075-bd6a627d76fd"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -147,28 +114,12 @@ public class GreetingControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"VIEWER"})
     public void putInvalid() throws Exception {
         mockMvc.perform(
-                put("/greeting/{id}", "0f81d478-6ece-4b59-8075-bd6a627d76fd")
+                put("/greeting/{id}", "0f91d478-6ece-4b59-8075-bd6a627d76fd")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true}"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isForbidden());
     }
-
-    /*@Test
-    public void patch() throws Exception {
-        mockMvc.perform(
-                get("/greeting")
-                        .contentType(MediaType.APPLICATION_JSON).content("/28d34abb-5c2e-4e3f-a4bb-3133f795674b"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void patchInvalid() throws Exception {
-        mockMvc.perform(
-                get("/greeting")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("/uuid2834abb-5c2e-4e3f-a4bb-3133f795674b"))
-                .andExpect(status().isNotFound());
-    }*/
 }

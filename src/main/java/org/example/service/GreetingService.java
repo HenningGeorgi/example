@@ -1,8 +1,6 @@
 package org.example.service;
 
-import org.example.model.CreateGreetingResponse;
-import org.example.model.Greeting;
-import org.example.model.NotFoundException;
+import org.example.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
