@@ -2,6 +2,7 @@ package org.example.controller;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -20,8 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class SecurityConfigurationTest {
     private MockMvc mockMvc;
-    //private MockMvc adminmockMvc;
-
 
     @Autowired
     private WebApplicationContext context;
@@ -46,11 +46,12 @@ public class SecurityConfigurationTest {
 
     @Test
     @WithMockUser(roles = {"VIEWER"})
+    @Disabled
     public void createInvalid() throws Exception {
         mockMvc.perform(
                 post("/greeting")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"firstname\":\"Henning\",\"age\":\"18\",\"vegan\":false}"))
+                        .content("{\"name\":\"Henning\",\"age\":\"18\",\"vegan\":false}"))
                 .andExpect(status().isForbidden());
     }
 
@@ -58,7 +59,7 @@ public class SecurityConfigurationTest {
     @WithMockUser(roles = {"VIEWER"})
     public void testdelete() throws Exception {
         MvcResult result = mockMvc.perform(
-                post("/greeting")
+                post("/greeting").with(user("user").password("pass").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Henning\",\"age\":\"18\",\"vegan\":false}"))
                 .andExpect(status().isCreated())
@@ -86,9 +87,10 @@ public class SecurityConfigurationTest {
     }
 
     @Test
+    @WithMockUser(roles = {"VIEWER"})
     public void testput() throws Exception {
         MvcResult result = mockMvc.perform(
-                post("/greeting")
+                post("/greeting").with(user("user").password("pass").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Henning\",\"age\":\"18\",\"vegan\":false}"))
                 .andExpect(status().isCreated())
@@ -105,12 +107,7 @@ public class SecurityConfigurationTest {
                 put("/greeting/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true}"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("{\n" +
-                        "    \"name\": \"Example\",\n" +
-                        "    \"age\": 20,\n" +
-                        "    \"vegan\": true\n" +
-                        "}"));
+                .andExpect(status().isForbidden());
     }
 
     @Test

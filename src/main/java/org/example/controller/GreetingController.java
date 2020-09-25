@@ -17,15 +17,13 @@ public class GreetingController {
 
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
+
     @Autowired
     private GreetingService service;
 
-
     @GetMapping("/greeting")
     public Greetings greetings() {
-        Greetings greetings = new Greetings();
-        greetings.setGreetings(service.names);
-        return greetings;
+        return service.greetings();
     }
 
     @GetMapping("/greeting/{id}")
@@ -33,29 +31,24 @@ public class GreetingController {
         Greeting greeting = service.getGreeting(id);
         return new CreateGreetingResponse(greeting.getId(), greeting.getName(), greeting.getVegan(), greeting.getAge());
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/greeting")
-    @RolesAllowed({"ADMIN","USER"})
+    @RolesAllowed({"ROLE_ADMIN","ROLE_USER"})
     public CreateGreetingResponse create(@Valid @RequestBody CreateGreetingRequest request) {
         return service.create(request.getName(), request.getVegan(), request.getAge());
     }
 
     @DeleteMapping("/greeting/{id}")
-    @RolesAllowed({"ADMIN","USER"})
+    @RolesAllowed({"ROLE_ADMIN","ROLE_USER"})
     public void delete(@PathVariable UUID id) {
         service.delete(id);
     }
 
     @PutMapping("/greeting/{id}")
-    @RolesAllowed({"ADMIN","USER"})
+    @RolesAllowed({"ROLE_ADMIN","ROLE_USER"})
     public CreateGreetingResponse put(@PathVariable UUID id, @Valid @RequestBody CreateGreetingRequest request) {
         return service.put(id, request.getName(), request.getVegan(), request.getAge());
-    }
-
-    @PatchMapping("/greeting/{id}/{data}")
-    @RolesAllowed({"ADMIN","USER"})
-    public void patch(@PathVariable UUID id,@PathVariable Object data) {
-        service.patch(id,data);
     }
 
     @ExceptionHandler

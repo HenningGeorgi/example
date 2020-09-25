@@ -56,8 +56,6 @@ public class GreetingControllerTest {
                         "    \"age\": 18,\n" +
                         "    \"vegan\": false\n" +
                         "}"));
-
-
     }
 
     @Test

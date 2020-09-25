@@ -3,7 +3,6 @@ package org.example.model;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.UUID;
-
 public class Greeting {
     @NotEmpty
     private final UUID id;

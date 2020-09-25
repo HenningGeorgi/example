@@ -1,55 +1,42 @@
 package org.example.service;
 
-import org.example.model.*;
+import org.example.model.CreateGreetingResponse;
+import org.example.model.Greeting;
+import org.example.model.Greetings;
+import org.example.repository.GreetingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class GreetingService {
 
-    public ArrayList<Greeting> names = new ArrayList<>();
+    @Autowired
+    private GreetingRepository repository;
+
     public CreateGreetingResponse create(String name, Boolean vegan, Integer age) {
         Greeting gr = new Greeting(UUID.randomUUID(),name, vegan, age);
-        names.add(gr);
+        repository.create(gr);
         return new CreateGreetingResponse(gr.getId(), name, vegan,age);
     }
 
+    public Greetings greetings() {
+        Greetings greetings = new Greetings();
+        greetings.setGreetings((ArrayList<Greeting>) repository.greetings());
+        return greetings;
+    }
+
     public Greeting getGreeting(UUID id) {
-        Optional<Greeting> greeting = names.stream()
-                .filter(g -> g.getId().equals(id))
-                .findAny();
-        if(!greeting.isPresent()) {throw new NotFoundException(id);}
-        return greeting.get();
+        return repository.getGreeting2(id);
     }
 
     public void delete(UUID id) {
-        Optional<Greeting> greeting = names.stream()
-                .filter(g->g.getId().equals(id))
-                .findAny();
-        if(!greeting.isPresent()) {throw new NotFoundException(id);}
-        names.remove(greeting.get());
+        repository.delete(id);
     }
 
     public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age) {
-        Optional<Greeting> greeting = names.stream()
-                .filter(g->g.getId().equals(id))
-                .findAny();
-        if(!greeting.isPresent()) {throw new NotFoundException(id);}
-        greeting.get().setName(newname);
-        greeting.get().setAge(age);
-        greeting.get().setVegan(vegan);
-        return new CreateGreetingResponse(greeting.get().getId(),greeting.get().getName(),greeting.get().getVegan(), greeting.get().getAge());
+        return repository.put(id,newname,vegan,age);
     }
-
-    public void patch(UUID id, Object data) {
-        for (Greeting name : names) {
-            if(name.getId().equals(id)) {
-
-            }
-        }
-    }
-
 }
