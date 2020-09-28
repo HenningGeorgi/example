@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class GreetingRepository {
+public class GreetingRepositorym {
 
     @Autowired
     private JdbcTemplate template;
@@ -32,12 +32,12 @@ public class GreetingRepository {
     }
 
     public Greeting getGreeting2(UUID id) {
-        Greeting gr = template.queryForObject("SELECT * FROM greeting WHERE id=?",Greeting.class);
+        List<Greeting> gr = template.query("SELECT * FROM greeting WHERE id=?", new UUID[]{id}, new GreetingRowMapper());
         Optional<Greeting> greeting = names.stream()
                 .filter(g -> g.getId().equals(id))
                 .findAny();
         if(!greeting.isPresent()) {throw new NotFoundException(id);}
-        return gr;
+        return gr.get(0);
     }
 
     public void delete(UUID id) {

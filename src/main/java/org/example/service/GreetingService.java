@@ -3,7 +3,7 @@ package org.example.service;
 import org.example.model.CreateGreetingResponse;
 import org.example.model.Greeting;
 import org.example.model.Greetings;
-import org.example.repository.GreetingRepository;
+import org.example.repository.GreetingRepositorym;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class GreetingService {
 
     @Autowired
-    private GreetingRepository repository;
+    private GreetingRepositorym repository;
 
     public CreateGreetingResponse create(String name, Boolean vegan, Integer age) {
         Greeting gr = new Greeting(UUID.randomUUID(),name, vegan, age);
