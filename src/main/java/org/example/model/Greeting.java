@@ -1,15 +1,18 @@
 package org.example.model;
 
 
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.UUID;
+@Entity
 public class Greeting {
-    @NotEmpty
-    private final UUID id;
+    @Id
+    private UUID id;
     private String name;
     private Integer age;
     private Boolean vegan;
 
+    public Greeting() {}
 
     public Greeting(UUID id, String name, Boolean vegan, Integer age) {
         this.id=id;

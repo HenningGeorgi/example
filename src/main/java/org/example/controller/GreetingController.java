@@ -21,6 +21,11 @@ public class GreetingController {
     @Autowired
     private GreetingService service;
 
+    @GetMapping("/CatFacts")
+    public String catFacts() {
+        return service.catFacts();
+    }
+
     @GetMapping("/greeting")
     public Greetings greetings() {
         return service.greetings();

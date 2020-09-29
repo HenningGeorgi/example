@@ -3,9 +3,13 @@ package org.example.service;
 import org.example.model.CreateGreetingResponse;
 import org.example.model.Greeting;
 import org.example.model.Greetings;
-import org.example.repository.GreetingRepositorym;
+import org.example.model.NotFoundException;
+import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -14,29 +18,45 @@ import java.util.UUID;
 public class GreetingService {
 
     @Autowired
-    private GreetingRepositorym repository;
+    private GreetingRepository repository;
+
+    private RestTemplate restTemplate = new RestTemplate();
+    String fooResourceUrl = "http://cat-fact.herokuapp.com/facts";
 
     public CreateGreetingResponse create(String name, Boolean vegan, Integer age) {
-        Greeting gr = new Greeting(UUID.randomUUID(),name, vegan, age);
-        repository.create(gr);
-        return new CreateGreetingResponse(gr.getId(), name, vegan,age);
+        Greeting gr = new Greeting(UUID.randomUUID(), name, vegan, age);
+        repository.save(gr);
+        return new CreateGreetingResponse(gr.getId(), name, vegan, age);
+    }
+
+    public String catFacts() {
+        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
+        assert (response.getStatusCode().equals(HttpStatus.OK));
+        return response.getBody();
     }
 
     public Greetings greetings() {
         Greetings greetings = new Greetings();
-        greetings.setGreetings((ArrayList<Greeting>) repository.greetings());
+        greetings.setGreetings((ArrayList<Greeting>) repository.findAll());
         return greetings;
     }
 
     public Greeting getGreeting(UUID id) {
-        return repository.getGreeting2(id);
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
     public void delete(UUID id) {
-        repository.delete(id);
+        if (!repository.existsById(id)) {
+            throw new NotFoundException(id);
+        }
+        repository.deleteById(id);
     }
 
     public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age) {
-        return repository.put(id,newname,vegan,age);
+        if (!repository.existsById(id)) {
+            throw new NotFoundException(id);
+        }
+        repository.save(new Greeting(id, newname, vegan, age));
+        return new CreateGreetingResponse(id, newname, vegan, age);
     }
 }
