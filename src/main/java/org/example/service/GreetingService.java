@@ -1,12 +1,8 @@
 package org.example.service;
 
-import org.example.model.CreateGreetingResponse;
-import org.example.model.Greeting;
-import org.example.model.Greetings;
-import org.example.model.NotFoundException;
+import org.example.model.*;
 import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,7 +17,7 @@ public class GreetingService {
     private GreetingRepository repository;
 
     private RestTemplate restTemplate = new RestTemplate();
-    String fooResourceUrl = "http://cat-fact.herokuapp.com/facts";
+    String fooResourceUrl = "https://dog.ceo/api/breeds/image/random";
 
     public CreateGreetingResponse create(String name, Boolean vegan, Integer age) {
         Greeting gr = new Greeting(UUID.randomUUID(), name, vegan, age);
@@ -29,9 +25,8 @@ public class GreetingService {
         return new CreateGreetingResponse(gr.getId(), name, vegan, age);
     }
 
-    public String catFacts() {
-        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
-        assert (response.getStatusCode().equals(HttpStatus.OK));
+    public Dog dog() {
+        ResponseEntity<Dog> response = restTemplate.getForEntity(fooResourceUrl, Dog.class);
         return response.getBody();
     }
 
