@@ -1,9 +1,10 @@
 package org.example.model;
 
 
+import org.springframework.data.annotation.Version;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Version;
 import java.util.UUID;
 @Entity
 public class Greeting {
@@ -11,6 +12,7 @@ public class Greeting {
     private UUID id;
     private String name;
     private Integer age;
+    @Version
     private Integer version;
     private Boolean vegan;
 

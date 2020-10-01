@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.awt.image.BufferedImage;
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -17,6 +17,8 @@ public class GreetingService {
 
     @Autowired
     private GreetingRepository repository;
+
+    private EntityManager entmanager;
 
     private RestTemplate restTemplate = new RestTemplate();
     String dogResourceUrl = "https://dog.ceo/api/breeds/image/random";
