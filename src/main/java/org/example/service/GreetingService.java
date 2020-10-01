@@ -3,10 +3,12 @@ package org.example.service;
 import org.example.model.*;
 import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -17,7 +19,8 @@ public class GreetingService {
     private GreetingRepository repository;
 
     private RestTemplate restTemplate = new RestTemplate();
-    String fooResourceUrl = "https://dog.ceo/api/breeds/image/random";
+    String dogResourceUrl = "https://dog.ceo/api/breeds/image/random";
+    String catResourceUrl = "https://aws.random.cat/meow";
 
     public CreateGreetingResponse create(String name, Boolean vegan, Integer age) {
         Greeting gr = new Greeting(UUID.randomUUID(), name, vegan, age);
@@ -25,8 +28,19 @@ public class GreetingService {
         return new CreateGreetingResponse(gr.getId(), name, vegan, age);
     }
 
+    public CreatePetInfoResponse createPetInfo(String name, String race, Integer age, String img) {
+        HttpEntity<PetInfo> request = new HttpEntity<>(new PetInfo(name, race, age, img));
+        PetInfo info = restTemplate.postForObject("http://localhost:8080/PetInfo", request, PetInfo.class);
+        return new CreatePetInfoResponse(name,race,age,img);
+    }
+
     public Dog dog() {
-        ResponseEntity<Dog> response = restTemplate.getForEntity(fooResourceUrl, Dog.class);
+        ResponseEntity<Dog> response = restTemplate.getForEntity(dogResourceUrl, Dog.class);
+        return response.getBody();
+    }
+
+    public Cat cat() {
+        ResponseEntity<Cat> response = restTemplate.getForEntity(catResourceUrl, Cat.class);
         return response.getBody();
     }
 

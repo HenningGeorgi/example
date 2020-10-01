@@ -1,4 +1,4 @@
-CREATE TABLE greeting IF NOT EXISTS (
+CREATE TABLE greeting (
     id      UUID         PRIMARY KEY,
     name    TEXT,
     age     int,

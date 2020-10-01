@@ -3,6 +3,7 @@ package org.example.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Version;
 import java.util.UUID;
 @Entity
 public class Greeting {
@@ -10,6 +11,7 @@ public class Greeting {
     private UUID id;
     private String name;
     private Integer age;
+    private Integer version;
     private Boolean vegan;
 
     public Greeting() {}
@@ -43,5 +45,13 @@ public class Greeting {
 
     public void setVegan(Boolean vegan) {
         this.vegan = vegan;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

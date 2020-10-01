@@ -1,8 +1,8 @@
 package org.example.model;
 
 public class Dog {
-    String message;
-    String status;
+    private String message;
+    private String status;
 
     public String getMessage() {
         return message;

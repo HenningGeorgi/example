@@ -26,6 +26,11 @@ public class GreetingController {
         return service.dog();
     }
 
+    @GetMapping("/Cat")
+    public Cat cat() {
+        return service.cat();
+    }
+
     @GetMapping("/greeting")
     public Greetings greetings() {
         return service.greetings();
@@ -36,6 +41,13 @@ public class GreetingController {
         Greeting greeting = service.getGreeting(id);
         return new CreateGreetingResponse(greeting.getId(), greeting.getName(), greeting.getVegan(), greeting.getAge());
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/PetInfo")
+    public CreatePetInfoResponse createPetInfo(@Valid @RequestBody CreatePetInfoRequest request) {
+        return service.createPetInfo(request.getName(), request.getRace(), request.getAge(), request.getImg());
+    }
+
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/greeting")
