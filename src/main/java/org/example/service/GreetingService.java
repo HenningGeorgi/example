@@ -18,8 +18,6 @@ public class GreetingService {
     @Autowired
     private GreetingRepository repository;
 
-    private EntityManager entmanager;
-
     private RestTemplate restTemplate = new RestTemplate();
     String dogResourceUrl = "https://dog.ceo/api/breeds/image/random";
     String catResourceUrl = "https://aws.random.cat/meow";
@@ -28,22 +26,6 @@ public class GreetingService {
         Greeting gr = new Greeting(UUID.randomUUID(), name, vegan, age);
         repository.save(gr);
         return new CreateGreetingResponse(gr.getId(), name, vegan, age);
-    }
-
-    public CreatePetInfoResponse createPetInfo(String name, String race, Integer age, String img) {
-        HttpEntity<PetInfo> request = new HttpEntity<>(new PetInfo(name, race, age, img));
-        PetInfo info = restTemplate.postForObject("http://localhost:8080/PetInfo", request, PetInfo.class);
-        return new CreatePetInfoResponse(name,race,age,img);
-    }
-
-    public Dog dog() {
-        ResponseEntity<Dog> response = restTemplate.getForEntity(dogResourceUrl, Dog.class);
-        return response.getBody();
-    }
-
-    public Cat cat() {
-        ResponseEntity<Cat> response = restTemplate.getForEntity(catResourceUrl, Cat.class);
-        return response.getBody();
     }
 
     public Greetings greetings() {
