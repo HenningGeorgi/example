@@ -30,22 +30,6 @@ public class GreetingService {
         return new CreateGreetingResponse(gr.getId(), name, vegan, age);
     }
 
-    public CreatePetInfoResponse createPetInfo(String name, String race, Integer age, String img) {
-        HttpEntity<PetInfo> request = new HttpEntity<>(new PetInfo(name, race, age, img));
-        PetInfo info = restTemplate.postForObject("http://localhost:8080/PetInfo", request, PetInfo.class);
-        return new CreatePetInfoResponse(name,race,age,img);
-    }
-
-    public Dog dog() {
-        ResponseEntity<Dog> response = restTemplate.getForEntity(dogResourceUrl, Dog.class);
-        return response.getBody();
-    }
-
-    public Cat cat() {
-        ResponseEntity<Cat> response = restTemplate.getForEntity(catResourceUrl, Cat.class);
-        return response.getBody();
-    }
-
     public Greetings greetings() {
         Greetings greetings = new Greetings();
         greetings.setGreetings((ArrayList<Greeting>) repository.findAll());
