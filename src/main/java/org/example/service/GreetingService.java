@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.model.*;
 import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,17 @@ public class GreetingService {
         repository.deleteById(id);
     }
 
-    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age) {
-        if (!repository.existsById(id)) {
-            throw new NotFoundException(id);
+    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age, Integer version) {
+        Greeting greeting = getGreeting(id);
+
+        if(!greeting.getVersion().equals(version)) {
+            throw new OptimisticLockingFailureException("mismatch version");
         }
-        repository.save(new Greeting(id, newname, vegan, age));
+
+        greeting.setName(newname);
+        greeting.setVegan(vegan);
+        greeting.setAge(age);
+
         return new CreateGreetingResponse(id, newname, vegan, age);
     }
 }
