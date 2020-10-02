@@ -19,6 +19,10 @@ public class GreetingService {
     @Autowired
     private GreetingRepository repository;
 
+    private RestTemplate restTemplate = new RestTemplate();
+    String dogResourceUrl = "https://dog.ceo/api/breeds/image/random";
+    String catResourceUrl = "https://aws.random.cat/meow";
+
     public CreateGreetingResponse create(String name, Boolean vegan, Integer age) {
         Greeting gr = new Greeting(UUID.randomUUID(), name, vegan, age);
         repository.save(gr);
