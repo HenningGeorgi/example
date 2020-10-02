@@ -32,7 +32,6 @@ public class GreetingController {
         return new CreateGreetingResponse(greeting.getId(), greeting.getName(), greeting.getVegan(), greeting.getAge());
     }
 
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/greeting")
     @RolesAllowed({"ROLE_ADMIN","ROLE_USER"})
