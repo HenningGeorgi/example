@@ -6,6 +6,7 @@ import org.example.model.Greetings;
 import org.example.model.NotFoundException;
 import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,8 +41,12 @@ public class GreetingService {
         repository.deleteById(id);
     }
 
-    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age) {
+    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age, Integer version) {
         Greeting greeting = getGreeting(id);
+
+        if(!greeting.getVersion().equals(version)) {
+            throw new OptimisticLockingFailureException("mismatch version");
+        }
 
         greeting.setName(newname);
         greeting.setVegan(vegan);
