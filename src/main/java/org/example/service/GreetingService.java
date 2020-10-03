@@ -48,12 +48,8 @@ public class GreetingService {
         repository.deleteById(id);
     }
 
-    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age, Integer version) {
+    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age) {
         Greeting greeting = getGreeting(id);
-
-        if(!greeting.getVersion().equals(version)) {
-            throw new OptimisticLockingFailureException("mismatch version");
-        }
 
         greeting.setName(newname);
         greeting.setVegan(vegan);

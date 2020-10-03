@@ -12,8 +12,6 @@ public class Greeting {
     private UUID id;
     private String name;
     private Integer age;
-    @Version
-    private Integer version;
     private Boolean vegan;
 
     public Greeting() {}
@@ -47,13 +45,5 @@ public class Greeting {
 
     public void setVegan(Boolean vegan) {
         this.vegan = vegan;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 }
