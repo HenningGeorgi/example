@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.model.Greeting;
+import org.example.domain.Greeting;
 import org.springframework.data.repository.*;
 import org.springframework.stereotype.Repository;
 

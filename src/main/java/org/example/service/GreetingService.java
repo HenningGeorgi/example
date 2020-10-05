@@ -1,9 +1,11 @@
 package org.example.service;
 
 import org.example.model.CreateGreetingResponse;
-import org.example.model.Greeting;
+import org.example.domain.Greeting;
 import org.example.model.Greetings;
 import org.example.model.NotFoundException;
+import org.example.domain.Greeting;
+import org.example.model.*;
 import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
