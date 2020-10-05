@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.domain.Greeting;
 import org.example.model.*;
 import org.example.service.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;

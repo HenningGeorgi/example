@@ -1,15 +1,13 @@
 package org.example.service;
 
+import org.example.domain.Greeting;
 import org.example.model.*;
 import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.UUID;
 
