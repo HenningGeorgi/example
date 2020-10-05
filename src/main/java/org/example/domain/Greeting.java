@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.domain;
 
 
 import org.springframework.data.annotation.Version;
