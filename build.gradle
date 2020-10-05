@@ -1,9 +1,9 @@
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.3.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id "com.github.spotbugs" version "4.5.0"
-    id 'checkstyle'
 }
 
 
@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.postgresql:postgresql'
     implementation('org.springframework.security:spring-security-config')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation "org.flywaydb:flyway-core:6.5.7"
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -32,12 +33,4 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-tasks.withType(Checkstyle) {
-    reports {
-        xml.enabled false
-        html.enabled true
-        html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
-    }
 }
