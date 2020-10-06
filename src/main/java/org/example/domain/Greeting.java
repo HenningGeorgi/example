@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.domain;
 
 
 import org.springframework.data.annotation.Version;
@@ -12,9 +12,9 @@ public class Greeting {
     private UUID id;
     private String name;
     private Integer age;
+    private Boolean vegan;
     @Version
     private Integer version;
-    private Boolean vegan;
 
     public Greeting() {}
 
@@ -23,6 +23,7 @@ public class Greeting {
         this.name=name;
         this.vegan=vegan;
         this.age=age;
+        version=0;
     }
 
     public UUID getId() { return id; }

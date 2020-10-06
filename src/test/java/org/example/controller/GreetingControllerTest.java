@@ -135,12 +135,13 @@ public class GreetingControllerTest {
         mockMvc.perform(
                 put("/greeting/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true}"))
+                        .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true,\"version\":0}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
                         "    \"name\": \"Example\",\n" +
                         "    \"age\": 20,\n" +
-                        "    \"vegan\": true\n" +
+                        "    \"vegan\": true,\n" +
+                        "    \"version\": 1\n" +
                         "}"));
     }
 
@@ -149,7 +150,7 @@ public class GreetingControllerTest {
         mockMvc.perform(
                 put("/greeting/{id}", "0f81d478-6ece-4b59-8075-bd6a627d76fd")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true}"))
+                        .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true,\"version\":0}"))
                 .andExpect(status().isNotFound());
     }
 

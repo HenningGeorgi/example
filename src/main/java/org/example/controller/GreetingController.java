@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.domain.Greeting;
 import org.example.model.*;
 import org.example.service.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,6 @@ public class GreetingController {
     @Autowired
     private GreetingService service;
 
-    @GetMapping("/Dog")
-    public Dog dog() {
-        return service.dog();
-    }
-
-    @GetMapping("/Cat")
-    public Cat cat() {
-        return service.cat();
-    }
-
     @GetMapping("/greeting")
     public Greetings greetings() {
         return service.greetings();
@@ -41,13 +32,6 @@ public class GreetingController {
         Greeting greeting = service.getGreeting(id);
         return new CreateGreetingResponse(greeting.getId(), greeting.getName(), greeting.getVegan(), greeting.getAge());
     }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/PetInfo")
-    public CreatePetInfoResponse createPetInfo(@Valid @RequestBody CreatePetInfoRequest request) {
-        return service.createPetInfo(request.getName(), request.getRace(), request.getAge(), request.getImg());
-    }
-
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/greeting")
@@ -64,8 +48,8 @@ public class GreetingController {
 
     @PutMapping("/greeting/{id}")
     @RolesAllowed({"ROLE_ADMIN","ROLE_USER"})
-    public CreateGreetingResponse put(@PathVariable UUID id, @Valid @RequestBody CreateGreetingRequest request) {
-        return service.put(id, request.getName(), request.getVegan(), request.getAge());
+    public CreateGreetingUpdateResponse put(@PathVariable UUID id, @Valid @RequestBody CreateGreetingUpdateRequest request) {
+        return service.put(id, request.getName(), request.getVegan(), request.getAge(), request.getVersion());
     }
 
     @ExceptionHandler

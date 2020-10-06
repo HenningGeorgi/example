@@ -106,7 +106,7 @@ public class SecurityConfigurationTest {
         mockMvc.perform(
                 put("/greeting/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true}"))
+                        .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true,\"version\":0}"))
                 .andExpect(status().isForbidden());
     }
 
@@ -116,7 +116,7 @@ public class SecurityConfigurationTest {
         mockMvc.perform(
                 put("/greeting/{id}", "0f91d478-6ece-4b59-8075-bd6a627d76fd")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true}"))
+                        .content("{\"name\":\"Example\",\"age\":\"20\",\"vegan\":true,\"version\":0}"))
                 .andExpect(status().isForbidden());
     }
 }

@@ -1,13 +1,13 @@
 package org.example.model;
 
 public class Cat {
-    public String getMessage() {
-        return message;
+    String file;
+
+    public String getFile() {
+        return file;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setFile(String file) {
+        this.file = file;
     }
-
-    private String message;
 }
