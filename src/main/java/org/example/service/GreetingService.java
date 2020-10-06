@@ -43,7 +43,7 @@ public class GreetingService {
         repository.deleteById(id);
     }
 
-    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age, Integer version) {
+    public CreateGreetingUpdateResponse put(UUID id, String newname, Boolean vegan, Integer age, Integer version) {
         Greeting greeting = getGreeting(id);
 
         if(!greeting.getVersion().equals(version)) {
@@ -53,7 +53,10 @@ public class GreetingService {
         greeting.setName(newname);
         greeting.setVegan(vegan);
         greeting.setAge(age);
+        greeting.setVersion(version + 1);
 
-        return new CreateGreetingResponse(id, newname, vegan, age);
+        Greeting savedGreeting = repository.save(greeting);
+
+        return new CreateGreetingUpdateResponse(id, newname, vegan, age, savedGreeting.getVersion());
     }
 }
