@@ -1,15 +1,16 @@
 package org.example.service;
 
+import org.example.model.CreateGreetingResponse;
+import org.example.domain.Greeting;
+import org.example.model.Greetings;
+import org.example.model.NotFoundException;
+import org.example.domain.Greeting;
 import org.example.model.*;
 import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -42,13 +43,20 @@ public class GreetingService {
         repository.deleteById(id);
     }
 
-    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age) {
+    public CreateGreetingUpdateResponse put(UUID id, String newname, Boolean vegan, Integer age, Integer version) {
         Greeting greeting = getGreeting(id);
+
+        if(!greeting.getVersion().equals(version)) {
+            throw new OptimisticLockingFailureException("mismatch version");
+        }
 
         greeting.setName(newname);
         greeting.setVegan(vegan);
         greeting.setAge(age);
+        greeting.setVersion(version + 1);
 
-        return new CreateGreetingResponse(id, newname, vegan, age);
+        Greeting savedGreeting = repository.save(greeting);
+
+        return new CreateGreetingUpdateResponse(id, newname, vegan, age, savedGreeting.getVersion());
     }
 }

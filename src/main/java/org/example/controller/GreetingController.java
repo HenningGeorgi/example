@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.domain.Greeting;
 import org.example.model.*;
 import org.example.service.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ public class GreetingController {
         return new CreateGreetingResponse(greeting.getId(), greeting.getName(), greeting.getVegan(), greeting.getAge());
     }
 
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/greeting")
     @RolesAllowed({"ROLE_ADMIN","ROLE_USER"})
@@ -48,8 +48,8 @@ public class GreetingController {
 
     @PutMapping("/greeting/{id}")
     @RolesAllowed({"ROLE_ADMIN","ROLE_USER"})
-    public CreateGreetingResponse put(@PathVariable UUID id, @Valid @RequestBody CreateGreetingRequest request) {
-        return service.put(id, request.getName(), request.getVegan(), request.getAge());
+    public CreateGreetingUpdateResponse put(@PathVariable UUID id, @Valid @RequestBody CreateGreetingUpdateRequest request) {
+        return service.put(id, request.getName(), request.getVegan(), request.getAge(), request.getVersion());
     }
 
     @ExceptionHandler

@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.domain.Greeting;
+
 import java.util.ArrayList;
 
 public class Greetings {
