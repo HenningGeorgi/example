@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '2.3.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id "com.github.spotbugs" version "4.5.0"
-    id 'checkstyle'
 }
 
 
@@ -34,10 +33,9 @@ test {
     useJUnitPlatform()
 }
 
-tasks.withType(Checkstyle) {
-    reports {
-        xml.enabled false
-        html.enabled true
-        html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+tasks.matching { task -> task.name.startsWith('spotbugs') }.forEach {
+    it.reports {
+        html.enabled = true
+        xml.enabled = false
     }
 }
