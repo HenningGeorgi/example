@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 public class CreateGreetingUpdateRequest extends CreateGreetingRequest{
 
     @NotNull
-    Integer version;
+    private Integer version;
 
     public Integer getVersion() {
         return version;
