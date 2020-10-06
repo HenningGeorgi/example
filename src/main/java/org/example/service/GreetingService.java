@@ -1,15 +1,13 @@
 package org.example.service;
 
+import org.example.domain.Greeting;
 import org.example.model.*;
 import org.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -18,6 +16,10 @@ public class GreetingService {
 
     @Autowired
     private GreetingRepository repository;
+
+    private RestTemplate restTemplate = new RestTemplate();
+    String dogResourceUrl = "https://dog.ceo/api/breeds/image/random";
+    String catResourceUrl = "https://aws.random.cat/meow";
 
     public CreateGreetingResponse create(String name, Boolean vegan, Integer age) {
         Greeting gr = new Greeting(UUID.randomUUID(), name, vegan, age);
@@ -42,8 +44,12 @@ public class GreetingService {
         repository.deleteById(id);
     }
 
-    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age) {
+    public CreateGreetingResponse put(UUID id, String newname, Boolean vegan, Integer age, Integer version) {
         Greeting greeting = getGreeting(id);
+
+        if(!greeting.getVersion().equals(version)) {
+            throw new OptimisticLockingFailureException("mismatch version");
+        }
 
         greeting.setName(newname);
         greeting.setVegan(vegan);
