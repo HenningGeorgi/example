@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.Constants;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -8,8 +10,8 @@ import javax.validation.constraints.NotEmpty;
 public class CreateGreetingRequest {
     @NotEmpty
     private String name;
-    @Min(12)
-    @Max(120)
+    @Min(Constants.MIN_AGE)
+    @Max(Constants.MAX_AGE)
     private Integer age;
     private Boolean vegan;
 

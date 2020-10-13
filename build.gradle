@@ -3,8 +3,12 @@ plugins {
     id 'org.springframework.boot' version '2.3.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id "com.github.spotbugs" version "4.5.0"
+    id "checkstyle"
 }
 
+checkstyle {
+    toolVersion '8.28'
+}
 
 group 'org.example'
 version '1.0-SNAPSHOT'
